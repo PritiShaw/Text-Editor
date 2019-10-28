@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Notepad</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
@@ -45,10 +45,15 @@
        <bool>false</bool>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:&quot;White&quot;</string>
+       <string notr="true">background-color:&quot;White&quot;;
+padding:2;
+border: 1px solid lightgrey</string>
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
     </item>
