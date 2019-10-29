@@ -3,7 +3,12 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QClipboard>
 #include<iostream>
+#include<QMimeData>
+#include<QFileDialog>
+#include<fstream>
+QString filename;
 using namespace  std;
 
 QList<QChar> strm;
@@ -16,8 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     createMap();
-    strm.push_back(QChar(0x2665));
+    strm.push_back(QChar('_'));
+    ui->label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    ui->label->setWordWrap(true);
+    ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
     crs=0;
+    filename=="";
 }
 
 //bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -60,12 +69,16 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
         int pos=0;
           for(int i=crs+1;i<strm.size();i++){
               if(strm[i]==QChar('\n')){
-                    strm.insert(strm.begin()+i+1,QChar(0x2665));
+                    strm.insert(strm.begin()+i+1,QChar('_'));
                     strm.removeAt(crs);
                     crs=i;
                     break;
               }
         }
+    }
+    else if(ev->key()==32){
+        strm.insert(strm.begin()+crs,QChar(' '));
+        crs++;
     }
     else if(ev->key()==16777236){
         if(crs!=strm.size()-1){
@@ -76,7 +89,7 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     else if(ev->key()==16777235){
         for(int i=crs-1;i>=0;i--){
             if(strm[i]==QChar('\n')){
-                  strm.insert(strm.begin()+i,QChar(0x2665));
+                  strm.insert(strm.begin()+i,QChar('_'));
                   strm.removeAt(crs+1);
                   crs=i;
                   break;
@@ -92,10 +105,17 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     }
     else if(ev->key()==16777233){
         strm.removeAt(crs);
-        strm.push_back(QChar(0x2665));
+        strm.push_back(QChar('_'));
         crs=strm.size()-1;
     }
     else if(ev->key()==16777238){
+
+    }
+    else if(ev->key()==16777223){
+        if(crs+1<strm.size())
+            strm.removeAt(crs+1);
+    }
+    else if (ev->key()==16777249) {
 
     }
     else if(ev->key()==16777239){
@@ -110,6 +130,46 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
 
     else if(ev->text()=="\u001b"){
 
+    }
+    //PASTE
+    else if(ev->text()=="\u0016"){
+
+            const QClipboard *clipboard = QApplication::clipboard();
+            const QMimeData *mimeData = clipboard->mimeData();
+            if(mimeData->hasText()){
+                QString str=mimeData->text();
+                QList<QChar> mlst;
+                for(int i=0;i<str.size();i++){
+                    mlst.push_back(str[i]);
+                    strm.insert(crs,str[i]);
+                    crs++;
+                }
+            }
+    }
+    //COPY
+    else if (ev->text()=="\u0003") {
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText(ui->label->selectedText());
+    }
+    //CUT
+    else if (ev->text()=="\u0018") {
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText(ui->label->selectedText());
+        int startSelection=ui->label->selectionStart();
+        int endSelection=startSelection+ui->label->selectedText().size()-1;
+        if(startSelection>crs){
+            int sz=ui->label->selectedText().size();
+            while(sz--){
+                strm.removeAt(startSelection);
+            }
+        }
+        if(endSelection<crs){
+            int sz=ui->label->selectedText().size();
+            while(sz--){
+                strm.removeAt(startSelection);
+                crs--;
+            }
+        }
     }
     else if(ev->text()=="\b"){
         if(strm.size()){
@@ -153,82 +213,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev)
     // ui->label->setText(ev->text());
 }
 void MainWindow::createMap(){
-    // compile and run ./map/mapCodeGen.cpp file and paste output below
-    unimap_shift["_"]="\u0983";
-    unimap_shift["<"]="\u09B7";
-    unimap_shift[":"]="\u099B";
-    unimap_shift["\""]="\u09A0";
-    unimap_shift["{"]="\u09A2";
-    unimap_shift["}"]="\u099E";
-    unimap_shift["?"]="\u09AF";
-    unimap_shift["+"]="\u098B";
-    unimap_shift["$"]="\u09B0\u09CD";
-    unimap_shift["%"]="\u099C\u09CD\u099E";
-    unimap_shift["^"]="\u09A4\u09CD\u09B0";
-    unimap_shift["&"]="\u0995\u09CD\u09B7";
-    unimap_shift["*"]="\u09B6\u09CD\u09B0";
-    unimap_shift["A"]="\u0993";
-    unimap_shift["C"]="\u09A3";
-    unimap_shift["D"]="\u0985";
-    unimap_shift["E"]="\u0986";
-    unimap_shift["F"]="\u0987";
-    unimap_shift["G"]="\u0989";
-    unimap_shift["H"]="\u09AB";
-    unimap_shift["I"]="\u0998";
-    unimap_shift["K"]="\u0996";
-    unimap_shift["L"]="\u09A5";
-    unimap_shift["M"]="\u09B6";
-    unimap_shift["O"]="\u09A7";
-    unimap_shift["P"]="\u099D";
-    unimap_shift["Q"]="\u0994";
-    unimap_shift["R"]="\u0988";
-    unimap_shift["S"]="\u098F";
-    unimap_shift["T"]="\u098A";
-    unimap_shift["U"]="\u0999";
-    unimap_shift["W"]="\u0990";
-    unimap_shift["X"]="\u0981";
-    unimap_shift["Y"]="\u09AD";
-    unimap_unshift[";"]="\u099A";
-    unimap_unshift["'"]="\u099F";
-    unimap_unshift["["]="\u09A1";
-    unimap_unshift["]"]="\u09BC";
-    unimap_unshift["/"]="\u09DF";
-    unimap_unshift["="]="\u09C3";
-    unimap_unshift["0"]="\u09E6";
-    unimap_unshift["1"]="\u09E7";
-    unimap_unshift["2"]="\u09E8";
-    unimap_unshift["3"]="\u09E9";
-    unimap_unshift["4"]="\u09EA";
-    unimap_unshift["5"]="\u09EB";
-    unimap_unshift["6"]="\u09EC";
-    unimap_unshift["7"]="\u09ED";
-    unimap_unshift["8"]="\u09EE";
-    unimap_unshift["9"]="\u09EF";
-    unimap_unshift["a"]="\u09CB";
-    unimap_unshift["b"]="\u09AC";
-    unimap_unshift["c"]="\u09AE";
-    unimap_unshift["d"]="\u09CD";
-    unimap_unshift["e"]="\u09BE";
-    unimap_unshift["f"]="\u09BF";
-    unimap_unshift["g"]="\u09C1";
-    unimap_unshift["h"]="\u09AA";
-    unimap_unshift["i"]="\u0997";
-    unimap_unshift["j"]="\u09B0";
-    unimap_unshift["k"]="\u0995";
-    unimap_unshift["l"]="\u09A4";
-    unimap_unshift["m"]="\u09B8";
-    unimap_unshift["n"]="\u09B2";
-    unimap_unshift["o"]="\u09A6";
-    unimap_unshift["p"]="\u099C";
-    unimap_unshift["q"]="\u09CC";
-    unimap_unshift["r"]="\u09C0";
-    unimap_unshift["s"]="\u09C7";
-    unimap_unshift["t"]="\u09C2";
-    unimap_unshift["u"]="\u09B9";
-    unimap_unshift["v"]="\u09A8";
-    unimap_unshift["w"]="\u09C8";
-    unimap_unshift["x"]="\u0982";
-    unimap_unshift["y"]="\u09AC";
+
 }
 
 MainWindow::~MainWindow()
@@ -236,3 +221,127 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_actionCut_triggered()
+{
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(ui->label->selectedText());
+    int startSelection=ui->label->selectionStart();
+    int endSelection=startSelection+ui->label->selectedText().size()-1;
+    if(startSelection>crs){
+        int sz=ui->label->selectedText().size();
+        while(sz--){
+            strm.removeAt(startSelection);
+        }
+    }
+    if(endSelection<crs){
+        int sz=ui->label->selectedText().size();
+        while(sz--){
+            strm.removeAt(startSelection);
+            crs--;
+        }
+    }
+    QString s="";
+    for(int i=0;i<strm.size();i++){
+        s.append(QChar( strm[i]));
+    }
+     qDebug()<<s<<endl;
+    ui->label->setText(s);
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(ui->label->selectedText());
+    QString s="";
+    for(int i=0;i<strm.size();i++){
+        s.append(QChar( strm[i]));
+    }
+     qDebug()<<s<<endl;
+    ui->label->setText(s);
+}
+
+void MainWindow::on_actionPaste_triggered()
+{
+    const QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *mimeData = clipboard->mimeData();
+    if(mimeData->hasText()){
+        QString str=mimeData->text();
+        QList<QChar> mlst;
+        for(int i=0;i<str.size();i++){
+            mlst.push_back(str[i]);
+            strm.insert(crs,str[i]);
+            crs++;
+        }
+    }
+    QString s="";
+    for(int i=0;i<strm.size();i++){
+        s.append(QChar( strm[i]));
+    }
+     qDebug()<<s<<endl;
+    ui->label->setText(s);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if(filename==""){
+        on_actionSave_As_triggered();
+    }
+    else {
+        std::string myfile = filename.toUtf8().constData();
+        fstream f;
+        f.open(myfile, ios::out);
+
+            for(int i=0;i<strm.size();i++){
+                if(i!=crs)
+                {
+                    char c=strm[i].unicode();
+                    f<<c;
+                }
+        }
+            f.close();
+    }
+
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    QString selFilter="All files (*.*)";
+    filename = QFileDialog::getSaveFileName(this,"Save file",QDir::currentPath(),
+        "Text files (*.txt);;All files (*.*)",&selFilter);
+     std::string myfile = filename.toUtf8().constData();
+     fstream f;
+     f.open(myfile, ios::out);
+
+         for(int i=0;i<strm.size();i++){
+             if(i!=crs)
+             {
+                 char c=strm[i].unicode();
+                 f<<c;
+             }
+     }
+         f.close();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+        filename = QFileDialog::getOpenFileName(this,
+        tr("Open Text File"), QDir::currentPath(), tr("Text Files (*.txt *.td *.gdt)"));
+        std::string myfile = filename.toUtf8().constData();
+        fstream f;
+        f.open(myfile);
+        strm.clear();
+        while(f){
+            char c;
+            f>>c;
+            strm.push_back(QChar(c));
+        }
+        crs=strm.size();
+        strm.push_back(QChar('_'));
+        QString s="";
+        for(int i=0;i<strm.size();i++){
+            s.append(QChar( strm[i]));
+        }
+         qDebug()<<s<<endl;
+        ui->label->setText(s);
+}
