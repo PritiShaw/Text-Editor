@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     strm.push_back(QChar('_'));
     ui->label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    ui->label->setWordWrap(false);
+    ui->label->setWordWrap(true);
     ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
     crs=0;
     filename=="";
