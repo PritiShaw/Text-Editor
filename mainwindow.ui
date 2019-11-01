@@ -41,6 +41,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="autoFillBackground">
        <bool>false</bool>
       </property>
@@ -65,7 +71,7 @@ border: 1px solid lightgrey</string>
      <x>0</x>
      <y>0</y>
      <width>559</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuText_Editor">
@@ -85,9 +91,31 @@ border: 1px solid lightgrey</string>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionStatus_Bar"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionBCSEIII_Systems_Lab_Assignment"/>
+    <addaction name="separator"/>
+    <addaction name="actionGroup_12"/>
+    <addaction name="action001710501068_Dibyajyoti_Dhar"/>
+    <addaction name="action001710501070_Akash_Ghosh"/>
+    <addaction name="action001710501073_Rohit_R_Chattopadhyay"/>
+    <addaction name="action001710501076_Priti_Shaw"/>
+    <addaction name="action3018105009_Soumika_Mukherjee"/>
+   </widget>
    <addaction name="menuText_Editor"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuAbout"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionCut">
    <property name="text">
     <string>Cut (Ctrl+X)</string>
@@ -116,6 +144,67 @@ border: 1px solid lightgrey</string>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionStatus_Bar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="actionBCSEIII_Systems_Lab_Assignment">
+   <property name="text">
+    <string>BCSEIII Systems Lab Assignment</string>
+   </property>
+  </action>
+  <action name="actionGroup_12">
+   <property name="text">
+    <string>Group 12</string>
+   </property>
+  </action>
+  <action name="action001710501068_Dibyajyoti_Dhar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>001710501068 Dibyajyoti Dhar</string>
+   </property>
+  </action>
+  <action name="action001710501070_Akash_Ghosh">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>001710501070 Akash Ghosh</string>
+   </property>
+  </action>
+  <action name="action001710501073_Rohit_R_Chattopadhyay">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>001710501073 Rohit R. Chattopadhyay</string>
+   </property>
+  </action>
+  <action name="action001710501076_Priti_Shaw">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>001710501076 Priti Shaw</string>
+   </property>
+  </action>
+  <action name="action3018105009_Soumika_Mukherjee">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>301710501009 Soumika Mukherjee</string>
    </property>
   </action>
  </widget>

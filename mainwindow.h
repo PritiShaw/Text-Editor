@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QLabel cordBlock;
 
 private slots:
 
@@ -33,11 +35,10 @@ private slots:
 
     void on_actionOpen_triggered();
 
+    void on_actionStatus_Bar_toggled(bool arg1);
+
 private:
     Ui::MainWindow *ui;
-    QMap<QString, QString> unimap_shift;
-    QMap<QString, QString> unimap_unshift;
-    void createMap();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

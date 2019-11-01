@@ -9,6 +9,7 @@
 #include<QFileDialog>
 #include<fstream>
 QString filename;
+#define DEBUG 0
 using namespace  std;
 
 QList<QChar> strm;
@@ -20,49 +21,19 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    createMap();
     strm.push_back(QChar('_'));
     ui->label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    ui->label->setWordWrap(true);
+    ui->label->setWordWrap(false);
     ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
     crs=0;
     filename=="";
+    statusBar()->addPermanentWidget(&cordBlock);
+    cordBlock.setText("Ln 1, Col 1");
 }
 
-//bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-//{
-//    if (event->type() == QEvent::KeyPress) {
-//        qDebug()<<event->type();
-//        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-//        if((keyEvent->modifiers() & Qt::ShiftModifier)){
-//            if(unimap_shift.find(keyEvent->text())!=unimap_shift.end()){
-//               // ui->text->insertPlainText(unimap_shift[keyEvent->text()].toUtf8());
-//                ui->label->setText("jiodsjfiodsjfoidsjiof");
-//                cout<<0<<endl;
-//                return true;
-//            }
-//            else{
-//                return false;
-//            }
-//        }
-//        else{
-//            if(unimap_unshift.find(keyEvent->text())!=unimap_unshift.end()){
-//               // ui->text->insertPlainText(unimap_unshift[keyEvent->text()].toUtf8());
-//                 ui->label->setText("jsdvnfdnvjfnvodfn");
-//                 cout<<1<<endl;
-//                return true;
-//            }
-//            else{
-//                return false;
-//            }
-//        }
-//    } else {
-//        return QObject::eventFilter(obj, event);
-//    }
-//}
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
-     qDebug()<<("You Pressed Key " )<<ev->key();
+     if(DEBUG) qDebug()<<("You Pressed Key " )<<ev->key();
     QString str(ev->text());
     if(ev->key()==16777237){
         int exst=0;
@@ -185,17 +156,17 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
    else {
         if(str.at(0)!=16777248){
         strm.insert(strm.begin()+crs,str.at(0));
-         qDebug()<<"WARNING == "<<str;
+         if(DEBUG) qDebug()<<"WARNING == "<<str;
         crs++;
         }
         else {
             if(str.size()>1){
                 strm.insert(strm.begin()+crs,str.at(1));
-                qDebug()<<"WARNING == "<<str;
+                if(DEBUG) qDebug()<<"WARNING == "<<str;
                 crs++;
             }
             else {
-               qDebug()<<"WARNING == "<<str;
+               if(DEBUG) qDebug()<<"WARNING == "<<str;
             }
         }
     }
@@ -203,17 +174,27 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     for(int i=0;i<strm.size();i++){
         s.append(QChar( strm[i]));
     }
-     qDebug()<<s<<endl;
+     if(DEBUG) qDebug()<<s<<endl;
     ui->label->setText(s);
-   // ui->label->setText(ui->label->text() +ev->text());
 }
 void MainWindow::keyReleaseEvent(QKeyEvent *ev)
 {
-    qDebug()<<("You Released Key " )<<ev->key();
-    // ui->label->setText(ev->text());
-}
-void MainWindow::createMap(){
-
+    int colCount = 0;
+    int rowCount = 1;
+    qDebug()<<"Hi";
+    for(int i=0;i<strm.size();i++){
+        colCount++;
+        if(strm[i]=='\n'){
+            rowCount++;
+            colCount = 0;
+        }
+        else if(strm[i]=='_'){
+            break;
+        }
+    }
+    QString str;
+    str.sprintf("Ln %2d, Col %2d", rowCount, colCount);
+    cordBlock.setText(str);
 }
 
 MainWindow::~MainWindow()
@@ -245,7 +226,7 @@ void MainWindow::on_actionCut_triggered()
     for(int i=0;i<strm.size();i++){
         s.append(QChar( strm[i]));
     }
-     qDebug()<<s<<endl;
+    if(DEBUG) qDebug()<<s<<endl;
     ui->label->setText(s);
 }
 
@@ -257,7 +238,7 @@ void MainWindow::on_actionCopy_triggered()
     for(int i=0;i<strm.size();i++){
         s.append(QChar( strm[i]));
     }
-     qDebug()<<s<<endl;
+    if(DEBUG) qDebug()<<s<<endl;
     ui->label->setText(s);
 }
 
@@ -278,7 +259,7 @@ void MainWindow::on_actionPaste_triggered()
     for(int i=0;i<strm.size();i++){
         s.append(QChar( strm[i]));
     }
-     qDebug()<<s<<endl;
+     if(DEBUG) qDebug()<<s<<endl;
     ui->label->setText(s);
 }
 
@@ -309,6 +290,8 @@ void MainWindow::on_actionSave_As_triggered()
     QString selFilter="All files (*.*)";
     filename = QFileDialog::getSaveFileName(this,"Save file",QDir::currentPath(),
         "Text files (*.txt);;All files (*.*)",&selFilter);
+     QWidget::setWindowTitle ( filename + " - Notepad");
+
      std::string myfile = filename.toUtf8().constData();
      fstream f;
      f.open(myfile, ios::out);
@@ -327,6 +310,7 @@ void MainWindow::on_actionOpen_triggered()
 {
         filename = QFileDialog::getOpenFileName(this,
         tr("Open Text File"), QDir::currentPath(), tr("Text Files (*.txt *.td *.gdt)"));
+        QWidget::setWindowTitle ( filename + " - Notepad");
         std::string myfile = filename.toUtf8().constData();
         fstream f;
         f.open(myfile);
@@ -336,12 +320,21 @@ void MainWindow::on_actionOpen_triggered()
             f>>c;
             strm.push_back(QChar(c));
         }
+        strm.pop_back();
         crs=strm.size();
         strm.push_back(QChar('_'));
         QString s="";
         for(int i=0;i<strm.size();i++){
             s.append(QChar( strm[i]));
         }
-         qDebug()<<s<<endl;
+         if(DEBUG) qDebug()<<s<<endl;
         ui->label->setText(s);
+}
+
+void MainWindow::on_actionStatus_Bar_toggled(bool arg1)
+{
+    if(arg1)
+        statusBar()->show();
+    else
+        statusBar()->hide();
 }
