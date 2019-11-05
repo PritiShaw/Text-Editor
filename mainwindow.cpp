@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
-        qDebug()<<("You Pressed Key " )<<ev->text();
-     if(DEBUG) qDebug()<<("You Pressed Key " )<<ev->key();
+    if(DEBUG) qDebug()<<("You Pressed Key " )<<ev->text();
+    if(DEBUG) qDebug()<<("You Pressed Key " )<<ev->key();
     QString str(ev->text());
     //ARROW DOWN
     if(ev->key()==16777237){
@@ -271,7 +271,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev)
 {
     int colCount = 0;
     int rowCount = 1;
-    qDebug()<<"Hi";
     for(int i=0;i<strm.size();i++){
         colCount++;
         if(strm[i]=='\n'){
