@@ -37,6 +37,8 @@ private slots:
 
     void on_actionStatus_Bar_toggled(bool arg1);
 
+    void on_actionNew_triggered();
+
 private:
     Ui::MainWindow *ui;
 

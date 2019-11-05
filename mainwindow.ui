@@ -71,7 +71,7 @@ border: 1px solid lightgrey</string>
      <x>0</x>
      <y>0</y>
      <width>559</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuText_Editor">
@@ -81,6 +81,7 @@ border: 1px solid lightgrey</string>
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionNew"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -172,7 +173,7 @@ border: 1px solid lightgrey</string>
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>001710501068 Dibyajyoti Dhar</string>
+    <string>001710501067 Dibyajyoti Dhar</string>
    </property>
   </action>
   <action name="action001710501070_Akash_Ghosh">
@@ -205,6 +206,11 @@ border: 1px solid lightgrey</string>
    </property>
    <property name="text">
     <string>301710501009 Soumika Mukherjee</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
    </property>
   </action>
  </widget>

@@ -444,3 +444,22 @@ void MainWindow::on_actionStatus_Bar_toggled(bool arg1)
     else
         statusBar()->hide();
 }
+
+void MainWindow::on_actionNew_triggered()
+{
+    filename="";
+    strm.clear();
+    strm.push_back(QChar('_'));
+
+    cursorStack.push_back(crs);
+    liststack.push_back(strm);
+
+    QString s="";
+    for(int i=0;i<strm.size();i++){
+        s.append(QChar( strm[i]));
+    }
+     if(DEBUG) qDebug()<<s<<endl;
+    ui->label->setText(s);
+    QWidget::setWindowTitle ("Notepad");
+
+}
