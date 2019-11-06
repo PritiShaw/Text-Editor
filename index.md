@@ -60,10 +60,10 @@ This function is used to open the file for writing.
 **`void on_actionStatus_Bar_toggled(bool)`**    
 This function shows or hides the status bar.
 
-**`void keyPressEvent(QKeyEvent event)`**  
+**`void keyPressEvent(QKeyEvent*)`**  
 This function is used to handle the exceptions that arise from pressing different keys such as backspace and Enter key.
 
-**`void keyReleaseEvent(QKeyEvent event)`**    
+**`void keyReleaseEvent(QKeyEvent*)`**    
 This function is used to maintain the row number and column number of the text.
 
 ---
