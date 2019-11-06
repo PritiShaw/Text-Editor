@@ -39,31 +39,31 @@ Arrow keys are handled as follows. When `LEFT ARROW` is pressed the cursor is mo
 ---
 ### 3. Important Functions
  
-`void on\_actionCut\_triggered()`  
+**`void on_actionCut_triggered()`**  
 It is used to cut the selected portion of the text. If the start position of the selected text is after the cursor, the selected text is deleted from the start position but the cursor value is not changed. If the end position is before the cursor, the selected text is deleted from the start position and the cursor value is decremented by the length of the selected text.
 
-`void on\_actionCopy\_triggered()`    
+**`void on_actionCopy_triggered()`**    
 It is used to make a copy of the selected portion of the text. The selected text is appended to the list of characters.
 
-`void on\_actionPaste\_triggered()`    
+**`void on_actionPaste_triggered()`**    
 It is used to paste the selected text into the new location pointed to by the cursor. The function first checks whether a cut or copy command precedes the paste command. If true, then the text is added after the cursor and the cursor is incremented by size of selected text.
 
-`void on\_actionSave\_triggered()`    
+**`void on_actionSave_triggered()`**    
 This function is used to save the file.
 
-`void on\_actionSave\_As\_triggered()`    
+**`void on_actionSave_As_triggered()`**    
 This function is used to save the file with a different name.
 
-`void on\_actionOpen\_triggered()`  
+**`void on_actionOpen_triggered()`**  
 This function is used to open the file for writing.
 
-`void on\_actionStatus\_Bar\_toggled(bool)`    
+**`void on_actionStatus_Bar_toggled(bool)`**    
 This function shows or hides the status bar.
 
-`void keyPressEvent(QKeyEvent _event)`  
+**`void keyPressEvent(QKeyEvent event)`**  
 This function is used to handle the exceptions that arise from pressing different keys such as backspace and Enter key.
 
-`void keyReleaseEvent(QKeyEvent _event)`    
+**`void keyReleaseEvent(QKeyEvent event)`**    
 This function is used to maintain the row number and column number of the text.
 
 ---
